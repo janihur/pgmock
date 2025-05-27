@@ -1,0 +1,24 @@
+services:
+  pgmockrest:
+    image: postgrest/postgrest:v13.0.0
+    container_name: pgmockrest
+    ports:
+      - "3000:3000"
+    environment:
+      PGRST_DB_URI: postgres://mock_user:password@pgmockdb:5432/mock_db
+      PGRST_DB_SCHEMAS: api
+      PGRST_DB_ANON_ROLE: web_anon
+      PGRST_OPENAPI_SERVER_PROXY_URI: http://127.0.0.1:3000
+      PGRST_OPENAPI_MODE: ignore-privileges
+    depends_on:
+      - pgmockdb
+
+  pgmockdb:
+    image: postgres:14
+    container_name: pgmockdb
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: mock_db
+      POSTGRES_USER: mock_user
+      POSTGRES_PASSWORD: password
