@@ -1,0 +1,9 @@
+services:
+  pgmockrest:
+    environment:
+      PGRST_DB_SCHEMAS: api
+  pgmockdb:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    image: pgmockdb-api:latest

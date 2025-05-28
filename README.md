@@ -2,28 +2,33 @@
 
 Mocking your [PostgreSQL](https://www.postgresql.org/) database when your programming language ecosystem doesn't support mocks.
 
-We'll run a PostgreSQL database and [PostgREST](https://postgrest.org/en/stable/index.html) in Docker containers. The database schema needs to be created in the database, and PostgREST will expose it as a RESTful API.
+We'll run a PostgreSQL database and [PostgREST](https://postgrest.org/en/stable/index.html) in Docker containers. Schema(s) needs to be created in the database, and PostgREST will expose all CRUD operations on the schema(s) as a RESTful API.
 
 Docker images:
 * https://hub.docker.com/_/postgres
 * https://hub.docker.com/r/postgrest/postgrest
 
-Run PostgreSQL and PostgREST in Docker containers with the provided [docker-compose.yml](docker-compose.yml) file.:
+Run PostgreSQL and PostgREST in Docker containers with `docker compose`:
 ```
+docker compose build
 docker compose up
 docker compose down
 ```
+
+You will tailor the database schema and initial data to your needs with [schema.sql](schema.sql) file and by building the tailored PostgreSQL Docker image with [`docker-compose.override.yml`](docker-compose.override.yml).
+
+See [`schema.sql`](schema.sql) file for the example schema and data (copied from the official PostgREST [tutorial](https://postgrest.org/en/stable/tutorials/tut0.html)).
+
+## How to Use PostgreSQL
 
 Run `psql` in the Docker container:
 ```
 # interactive psql shell
 docker exec --interactive --tty pgmockdb psql --username mock_user --dbname mock_db
 
-# run SQL commands from file
+# run sql commands from a file
 docker exec --interactive pgmockdb psql --username mock_user --dbname mock_db < example.sql
 ```
-
-See [`example.sql`](example.sql) file for the example schema and data.
 
 ## How to Use PostgREST
 
