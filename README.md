@@ -65,6 +65,8 @@ curl -X DELETE 'http://localhost:3000/todos?id=eq.3'
 
 [SQL Gateway](https://docs.intersystems.com/irislatest/csp/docbook/DocBook.UI.Page.cls?KEY=BSQG_overview) is the IRIS concept which allows you to connect to external databases like PostgreSQL.
 
+You'll find the PostgreSQL JDBC driver in https://jdbc.postgresql.org/
+
 In Management Portal:
 ```
 System Administration
@@ -73,8 +75,6 @@ System Administration
    > SQL Gateway Connections
     > Create New Connection
 ```
-
-It's not yet known how this can be done programmatically.
 
 Set values to:
 
@@ -88,7 +88,31 @@ Set values to:
 |URL            |`jdbc:postgresql://pgmockdb:5432/mock_db`|
 |Class path     |`/usr/irissys/lib/postgresql-42.7.5.jar`|
 
-You'll find the PostgreSQL JDBC driver in https://jdbc.postgresql.org/
+Or programmatically with [%Library.SQLConnection](https://docs.intersystems.com/irislatest/csp/documatic/%25CSP.Documatic.cls?LIBRARY=%25SYS&CLASSNAME=%25Library.SQLConnection) class:
+
+```
+set connection = ##class(%Library.SQLConnection).%New()
+
+set connection.Name = "pgmockdb"
+set connection.DSN = ""
+set connection.Usr = "mock_user"
+set connection.pwd = "password"
+set connection.ReverseOJ = 0
+set connection.isJDBC = 1
+set connection.useCAST = 0
+set connection.useCASTCHAR = 0
+set connection.useCOALESCE = 1
+set connection.URL = "jdbc:postgresql://pgmockdb:5432/mock_db"
+set connection.driver = "org.postgresql.Driver"
+set connection.classpath = "/usr/irissys/lib/postgresql-42.7.5.jar"
+set connection.properties = ""
+set connection.nodefq = 0
+set connection.nofnconv = 0
+set connection.needlongdatalen = 0
+set connection.nvl = 0
+
+set status = connection.%Save()
+```
 
 ### Interoperability (IOP) Production Setup
 
